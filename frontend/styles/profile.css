@@ -1,0 +1,82 @@
+/* frontend/styles/profile.css */
+
+/* Main header */
+main h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #111827;
+    margin-bottom: 2rem;
+  }
+  
+  /* Profile container */
+  .profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Profile details */
+  #profile-details {
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  #profile-details p {
+    font-size: 1.1rem;
+    margin: 0.75rem 0;
+    color: #374151;
+  }
+  
+  #profile-details strong {
+    color: #111827;
+  }
+  
+  /* Edit form */
+  #edit-form {
+    padding: 1.5rem;
+  }
+  
+  #edit-form label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+  }
+  
+  #edit-form input {
+    width: 100%;
+    padding: 0.875rem;
+    margin-bottom: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+  }
+  
+  #edit-form button {
+    margin-right: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+  
+  #edit-button {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 1rem auto;
+    background-color: #3b82f6;
+  }
+  
+  #edit-button:hover {
+    background-color: #2563eb;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .profile-container {
+      padding: 1rem;
+    }
+  
+    #edit-form input {
+      margin-bottom: 0.75rem;
+    }
+  }

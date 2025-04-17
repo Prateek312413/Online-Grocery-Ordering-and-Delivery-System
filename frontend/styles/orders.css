@@ -1,0 +1,62 @@
+/* frontend/styles/orders.css */
+
+/* Main header */
+main h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #111827;
+    margin-bottom: 2rem;
+  }
+  
+  /* Order container */
+  .order-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  .order-container > div {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+  
+  .order-container > div:hover {
+    transform: translateY(-5px);
+  }
+  
+  .order-container h3 {
+    color: #16a34a;
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .order-container p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    color: #374151;
+  }
+  
+  .order-container ul {
+    list-style: none;
+    margin-top: 1rem;
+  }
+  
+  .order-container ul li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .order-container {
+      padding: 0.5rem;
+    }
+  
+    .order-container > div {
+      padding: 1rem;
+    }
+  }

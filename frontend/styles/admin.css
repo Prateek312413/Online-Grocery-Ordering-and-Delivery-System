@@ -1,0 +1,108 @@
+/* frontend/styles/admin.css */
+
+/* Container */
+.container {
+    padding: 2.5rem;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Headings */
+  h2 {
+    font-size: 2rem;
+    color: #dc2626; /* Red for admin */
+    margin-bottom: 2rem;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    color: #111827;
+    margin: 1.5rem 0 1rem;
+  }
+  
+  /* Logout button */
+  #admin-logout-btn {
+    display: block;
+    margin: 0 auto 2rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #dc2626;
+  }
+  
+  #admin-logout-btn:hover {
+    background-color: #b91c1c;
+  }
+  
+  /* Order cards */
+  .order-card {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+  
+  .order-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .order-header {
+    background: #f0fdf4;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  
+  .status-select {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 0.5rem;
+  }
+  
+  /* Add product form */
+  #add-product-form {
+    max-width: 500px;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f9fafb;
+    border-radius: 12px;
+  }
+  
+  /* Products container */
+  #products-container {
+    margin-top: 2rem;
+  }
+  
+  .product-item {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  
+  .product-item button {
+    float: right;
+    padding: 0.5rem 1rem;
+    background-color: #dc2626;
+  }
+  
+  .product-item button:hover {
+    background-color: #b91c1c;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+  
+    #add-product-form {
+      padding: 1rem;
+    }
+  
+    .order-card {
+      padding: 1rem;
+    }
+  }

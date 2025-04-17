@@ -1,0 +1,63 @@
+/* frontend/styles/index.css */
+
+/* Main container for home page */
+.container {
+    padding: 2.5rem;
+    background: linear-gradient(180deg, #f0fdf4, #ffffff); /* Subtle gradient for modern look */
+  }
+  
+  /* Product container enhancements */
+  .product-container {
+    gap: 2rem;
+    padding: 1rem;
+  }
+  
+  .product-container div {
+    border: 1px solid #e5e7eb; /* Light border for definition */
+    overflow: hidden; /* Ensure rounded corners work */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .product-container div:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
+  
+  .product-container img {
+    height: 180px; /* Slightly larger images */
+    object-fit: contain; /* Ensure images fit without distortion */
+    background-color: #f9fafb; /* Light background for consistency */
+  }
+  
+  .product-container p {
+    font-size: 1.2rem;
+    color: #111827;
+    margin: 0.75rem 0;
+  }
+  
+  .product-container button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #16a34a;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .product-container button:hover {
+    background-color: #15803d;
+    transform: translateY(-2px);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .product-container {
+      grid-template-columns: 1fr; /* Single column on mobile */
+      gap: 1rem;
+    }
+  
+    .product-container img {
+      height: 150px;
+    }
+  }

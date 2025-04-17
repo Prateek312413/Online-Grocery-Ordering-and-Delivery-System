@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GroceryExpress - Home</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles/index.css">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="cart.html">Cart</a>
+    <a href="orders.html">Orders</a>
+    <a href="profile.html">Profile</a>
+    <a href="delivery-tracking.html">Track Delivery</a>
+    <button id="logout-btn">Logout</button>
+  </nav>
+  <div class="container">
+    <h2>Welcome to Grocery Express</h2>
+    <div id="product-container" class="product-container"></div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = 'login.html';
+    }
+
+    async function loadProducts() {
+      try {
+        const response = await fetch('http://localhost:5000/api/products', {
+          headers: {
+            'Authorization': `Bearer ${token}` // Add token to request
+          }
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.success) {
+          const products = data.products;
+          const productContainer = document.getElementById('product-container');
+          productContainer.innerHTML = '';
+          // Mapping of product names to image filenames (based on your frontend folder)
+          const productImages = {
+            'Milk': 'milk.png',
+            'Bread': 'bread.png',
+            'Eggs': 'eggs.png',
+            'Apples': 'apple.png',
+            'Papaya': 'papaya.jpg',
+            'LED':'LED.jpg',
+            'Dairy Milk':'Dairy.jpg',
+            'Kit Kat': 'kit.jpg',
+            'pepsi':'pepsi.jpeg',
+            'Lakme Cream':'Lakme.avif',
+            'Vegetables':'Veg.webp'
+
+          };
+
+          products.forEach(product => {
+            const productDiv = document.createElement('div');
+            const imageFilename = productImages[product.name] || 'https://via.placeholder.com/150'; // Fallback to placeholder if no match
+            productDiv.innerHTML = `
+              <img src="./images/${imageFilename}" alt="${product.name}">
+              <p>${product.name} - $${product.price}</p>
+              <button onclick="addToCart(${product.product_id}, '${product.name}', ${product.price})">Add to Cart</button>
+            `;
+            productContainer.appendChild(productDiv);
+          });
+        } else {
+          alert(data.message || 'Failed to load products');
+        }
+      } catch (error) {
+        console.error('Error loading products:', error);
+        alert('Failed to load products. Please ensure you are logged in and the server is running.');
+      }
+    }
+
+    function addToCart(productId, name, price) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push({ product_id: productId, name, price, quantity: 1 });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(`${name} added to cart!`);
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = 'login.html';
+    }
+
+    document.getElementById('logout-btn').addEventListener('click', logout);
+
+    // Initial load
+    loadProducts();
+  </script>
+  <!-- Temporarily comment out the problematic script to avoid MIME type error during local testing
+  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92fdb05f9dec6775',t:'MTc0NDU3NTg4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+  -->
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'930b577409c5add7',t:'MTc0NDcxOTA0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h4>About Us</h4>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Customer Service</h4>
+      <ul>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Follow Us</h4>
+      <div class="social-links">
+        <a href="#">Facebook</a>
+        <a href="#">Twitter</a>
+        <a href="#">Instagram</a>
+      </div>
+    </div>
+  </div>
+  <div class="copyright">
+    <p>&copy; 2025 Grocery Express. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+  </div>
+</footer>
+</body>
+</html>

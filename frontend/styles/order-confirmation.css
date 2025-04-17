@@ -1,0 +1,53 @@
+/* frontend/styles/order-confirmation.css */
+
+/* Container */
+.container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+    text-align: center;
+  }
+  
+  /* Heading */
+  h2 {
+    font-size: 2rem;
+    color: #16a34a;
+    margin-bottom: 1rem;
+  }
+  
+  /* Confirmation message */
+  #confirmationMessage {
+    font-size: 1.2rem;
+    color: #374151;
+    margin-bottom: 2rem;
+  }
+  
+  /* Back to home button (optional, added for UX) */
+  .container a {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #3b82f6;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  
+  .container a:hover {
+    background-color: #2563eb;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+  
+    h2 {
+      font-size: 1.75rem;
+    }
+  }

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delivery Tracking - GroceryExpress</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles/delivery-tracking.css">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script src="scripts/auth.js"></script>
+</head>
+<body onload="checkAuth()">
+  <h1>GroceryExpress</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="cart.html">Cart</a>
+    <a href="orders.html">Orders</a>
+    <a href="profile.html">Profile</a>
+    <a href="delivery-tracking.html">Track Delivery</a>
+    <a href="#" onclick="logout()" style="color: red;">Logout</a>
+  </nav>
+
+  <h2>Delivery Tracking</h2>
+  <div id="delivery-status">
+    <p>Enter Order ID: <input type="number" id="order-id" placeholder="Order ID"></p>
+    <button onclick="loadDeliveryStatus()">Track</button>
+    <div id="status-container"></div>
+  </div>
+
+  <script>
+    function checkAuth() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = 'login.html';
+      }
+    }
+
+    async function loadDeliveryStatus() {
+      const orderId = document.getElementById('order-id').value;
+      if (!orderId) {
+        document.getElementById('status-container').innerHTML = '<p>Please enter an Order ID.</p>';
+        return;
+      }
+
+      try {
+        const response = await fetchWithAuth(`http://localhost:5000/api/orders/${orderId}/delivery`);
+        const data = await response.json();
+        if (data.success) {
+          const delivery = data.delivery;
+          document.getElementById('status-container').innerHTML = `
+            <p>Delivery Type: ${delivery.delivery_type}</p>
+            <p>Status: ${delivery.status}</p>
+            <p>Estimated Delivery: ${new Date(delivery.estimated_delivery_date).toLocaleDateString()}</p>
+            <p>Address: ${delivery.street_address}, ${delivery.city}, ${delivery.state}, ${delivery.postal_code}, ${delivery.country}</p>
+          `;
+        } else {
+          document.getElementById('status-container').innerHTML = `<p>${data.message}</p>`;
+        }
+      } catch (error) {
+        console.error('Error loading delivery status:', error);
+        document.getElementById('status-container').innerHTML = '<p>Failed to load delivery status. Please log in or try again.</p>';
+      }
+    }
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92fb6cbc68367b90',t:'MTc0NDU1MjE0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>

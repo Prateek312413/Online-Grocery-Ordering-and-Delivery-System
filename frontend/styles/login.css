@@ -1,0 +1,79 @@
+/* frontend/styles/login.css */
+
+/* Page header */
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #111827;
+    margin-bottom: 2rem;
+  }
+  
+  /* Container */
+  .container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Form styling */
+  #login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  #login-form div {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #login-form label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+  }
+  
+  #login-form input {
+    padding: 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+  }
+  
+  #login-form button {
+    padding: 0.75rem;
+    background-color: #16a34a;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+  }
+  
+  #login-form button:hover {
+    background-color: #15803d;
+  }
+  
+  /* Links */
+  .container p {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .container p a {
+    color: #3b82f6;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  .container p a:hover {
+    color: #2563eb;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+      margin: 1rem;
+    }
+  }

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders - GroceryExpress</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles/orders.css">
+  <script src="scripts/auth.js"></script>
+</head>
+<body>
+  <header>
+    <img src="./images/logo.png" alt="GroceryExpress Logo" style="width: 100px; height: auto;">
+    <h1>GroceryExpress</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+      <a href="orders.html">Orders</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" style="color: red;" onclick="logout()">Logout</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Your Orders</h1>
+    <div class="order-container"></div>
+  </main>
+
+  <script>
+    window.onload = async function() {
+      try {
+        const response = await fetchWithAuth('http://localhost:5000/api/orders');
+        const data = await response.json();
+        const orderContainer = document.querySelector('.order-container') || document.createElement('div');
+        orderContainer.className = 'order-container';
+        
+        if (!data.success) {
+          orderContainer.innerHTML = `<p>Error: ${data.message || 'Failed to load orders'}</p>`;
+          document.body.appendChild(orderContainer);
+          return;
+        }
+
+        const orders = Array.isArray(data.orders) ? data.orders : [];
+        orderContainer.innerHTML = '';
+
+        if (orders.length === 0) {
+          orderContainer.innerHTML = '<p>No orders found.</p>';
+        } else {
+          orders.forEach(order => {
+            const totalAmount = Number(order.total_amount) || 0;
+            const orderDiv = document.createElement('div');
+            orderDiv.innerHTML = `
+              <h3>Order #${order.order_id}</h3>
+              <p>Date: ${order.order_date ? new Date(order.order_date).toLocaleString() : 'N/A'}</p>
+              <p>Total Amount: $${totalAmount.toFixed(2)}</p>
+              <p>Status: ${order.status || 'Unknown'}</p>
+              <h4>Items:</h4>
+              <ul>
+                ${order.items && Array.isArray(order.items) ? order.items.map(item => {
+                  const itemPrice = Number(item.price) || 0;
+                  return `<li>${item.quantity} x ${item.name} (@ $${itemPrice.toFixed(2)})</li>`;
+                }).join('') : '<li>No items</li>'}
+              </ul>
+            `;
+            orderContainer.appendChild(orderDiv);
+          });
+        }
+        document.body.appendChild(orderContainer);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        const orderContainer = document.querySelector('.order-container') || document.createElement('div');
+        orderContainer.className = 'order-container';
+        orderContainer.innerHTML = '<p>Failed to load orders. Please try again or log in.</p>';
+        document.body.appendChild(orderContainer);
+      }
+    };
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92fb6cbb6cb86762',t:'MTc0NDU1MjE0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9300b909f916bfc5',t:'MTc0NDYwNzY5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>

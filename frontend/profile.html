@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - GroceryExpress</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles/profile.css">
+  <script src="scripts/auth.js"></script>
+</head>
+<body>
+  <header>
+    <img src="./images/logo.png" alt="GroceryExpress Logo" style="width: 100px; height: auto;">
+    <h1>Grocery Express</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+      <a href="orders.html">Orders</a>
+      <a href="profile.html">Profile</a>
+      <a href="#" style="color: red;" onclick="logout()">Logout</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Your Profile</h1>
+    <div class="profile-container">
+      <div id="profile-details" style="margin-bottom: 20px;"></div>
+      <div id="edit-profile" style="display: none;">
+        <form id="edit-form">
+          <label for="name">Name:</label><br>
+          <input type="text" id="name" name="name" required><br><br>
+          <label for="email">Email:</label><br>
+          <input type="email" id="email" name="email" required><br><br>
+          <label for="password">New Password (leave blank to keep current):</label><br>
+          <input type="password" id="password" name="password"><br><br>
+          <button type="submit">Save Changes</button>
+          <button type="button" onclick="cancelEdit()">Cancel</button>
+        </form>
+      </div>
+      <button id="edit-button" onclick="toggleEdit()">Edit Profile</button>
+    </div>
+  </main>
+
+  <script>
+    function toggleEdit() {
+      const details = document.getElementById('profile-details');
+      const edit = document.getElementById('edit-profile');
+      const editButton = document.getElementById('edit-button');
+      if (edit.style.display === 'none') {
+        details.style.display = 'none';
+        edit.style.display = 'block';
+        editButton.textContent = 'Back to Profile';
+      } else {
+        details.style.display = 'block';
+        edit.style.display = 'none';
+        editButton.textContent = 'Edit Profile';
+        loadProfile();
+      }
+    }
+
+    function cancelEdit() {
+      const details = document.getElementById('profile-details');
+      const edit = document.getElementById('edit-profile');
+      const editButton = document.getElementById('edit-button');
+      details.style.display = 'block';
+      edit.style.display = 'none';
+      editButton.textContent = 'Edit Profile';
+    }
+
+    async function loadProfile() {
+      try {
+        const response = await fetchWithAuth('http://localhost:5000/api/auth/profile');
+        const user = await response.json();
+        if (user.success && user.name && user.email) {
+          const details = document.getElementById('profile-details');
+          details.innerHTML = `
+            <p><strong>Name:</strong> ${user.name}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+          `;
+          document.getElementById('name').value = user.name || '';
+          document.getElementById('email').value = user.email || '';
+        } else {
+          throw new Error(user.message || 'Invalid user data received');
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        const details = document.getElementById('profile-details');
+        details.innerHTML = '<p>Failed to load profile. Please log in again.</p>';
+      }
+    }
+
+    async function saveProfile(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!name || !email) {
+        alert('Name and email are required.');
+        return;
+      }
+
+      const data = { name, email };
+      if (password) data.password = password;
+
+      try {
+        const response = await fetchWithAuth('http://localhost:5000/api/auth/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        if (result.success) {
+          alert('Profile updated successfully!');
+          document.getElementById('edit-form').reset();
+          toggleEdit();
+          loadProfile();
+        } else {
+          alert(`Failed to update profile: ${result.message || 'Unknown error'}`);
+        }
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        alert(`Error updating profile: ${error.message || 'Please try again.'}`);
+      }
+    }
+
+    document.getElementById('edit-form').addEventListener('submit', saveProfile);
+
+    window.onload = function() {
+      loadProfile();
+    };
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92fb6cfa0ad1b0af',t:'MTc0NDU1MjE1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9300b90a9957184b',t:'MTc0NDYwNzY5OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'930b8c8da9d5c01d',t:'MTc0NDcyMTIyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

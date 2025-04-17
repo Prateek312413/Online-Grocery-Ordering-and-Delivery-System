@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - GroceryExpress</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles/cart.css">
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script src="scripts/auth.js"></script>
+</head>
+<body onload="displayCart()">
+  <h1>GroceryExpress</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="cart.html">Cart</a>
+    <a href="orders.html">Orders</a>
+    <a href="profile.html">Profile</a>
+    <a href="delivery-tracking.html">Track Delivery</a>
+    <a href="#" onclick="logout()" style="color: red;">Logout</a>
+  </nav>
+
+  <h2>Your Cart</h2>
+  <div id="cart-container"></div>
+
+  <script>
+    function displayCart() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const cartContainer = document.getElementById('cart-container');
+      cartContainer.innerHTML = '<h3>Order Summary</h3>';
+      let total = 0;
+  
+      if (cart.length === 0) {
+        cartContainer.innerHTML += '<p>Your cart is empty</p>';
+      } else {
+        cart.forEach(item => {
+          const itemTotal = item.price * item.quantity;
+          total += itemTotal;
+          cartContainer.innerHTML += `
+            <div class="cart-item">
+              <span>${item.name} x${item.quantity}</span>
+              <span>$${item.price} each</span>
+              <button onclick="updateQuantity(${item.product_id}, ${item.quantity - 1 > 0 ? item.quantity - 1 : 0})" style="background-color: red; color: white;">-$${item.price}</button>
+              <button onclick="updateQuantity(${item.product_id}, ${item.quantity + 1})" style="background-color: green; color: white;">+$${item.price}</button>
+              <button onclick="updateQuantity(${item.product_id}, 0)" style="background-color: gray; color: white;">Remove</button>
+            </div>
+          `;
+        });
+        cartContainer.innerHTML += `
+          <p>Total: $${total.toFixed(2)}</p>
+          <div id="delivery-options">
+            <h4>Select Delivery Option:</h4>
+            <label><input type="radio" name="delivery" value="standard" checked> Standard (3-5 days)</label>
+            <label><input type="radio" name="delivery" value="express"> Express (1-2 days)</label>
+          </div>
+          <button onclick="checkout()" class="btn">Proceed to Checkout</button>
+        `;
+      }
+    }
+  
+    function removeFromCart(product_id) {
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      cart = cart.filter(item => item.product_id !== product_id);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      displayCart();
+    }
+  
+    function updateQuantity(product_id, quantity) {
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const item = cart.find(item => item.product_id === product_id);
+      if (item && quantity >= 0) {
+        if (quantity === 0) {
+          removeFromCart(product_id);
+        } else {
+          item.quantity = quantity;
+          localStorage.setItem('cart', JSON.stringify(cart));
+        }
+      }
+      displayCart();
+    }
+  
+    async function checkout() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      if (cart.length === 0) {
+        alert('Cart is empty');
+        return;
+      }
+  
+      const deliveryType = document.querySelector('input[name="delivery"]:checked').value;
+      const formattedCart = cart.map(item => ({
+        product_id: item.product_id,
+        quantity: item.quantity
+      }));
+  
+      try {
+        const response = await fetchWithAuth('http://localhost:5000/api/orders', {
+          method: 'POST',
+          body: JSON.stringify({ cart: formattedCart, deliveryType })
+        });
+        const data = await response.json();
+        if (data.success) {
+          localStorage.removeItem('cart');
+          window.location.href = `order-confirmation.html?orderId=${data.orderId}`;
+        } else {
+          alert(`Failed to process checkout: ${data.message}`);
+        }
+      } catch (error) {
+        console.error('Checkout error:', error);
+        alert('Failed to process checkout. Please log in or try again.');
+      }
+    }
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92fb6cbb7faddd25',t:'MTc0NDU1MjE0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>
